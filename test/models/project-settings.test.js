@@ -3,6 +3,7 @@ import fs from 'fs';
 import fse from 'fs-extra';
 import config from 'config';
 import { fileExists } from 'util/fs';
+import { expectFileToNotExist } from '../helpers/fs-helpers';
 
 const { basePath } = config;
 const settingsPath = basePath + '/.reduxrc';
@@ -144,6 +145,14 @@ describe('ProjectSettings', () => {
       };
       settings.setAllSettings(overrideAll);
       expect(settings.getAllSettings()).to.eql(overrideAll);
+    });
+  });
+
+  describe('#remove', () => {
+    it('deletes the current settings file', () => {
+      const settings = new ProjectSettings();
+      settings.remove();
+      expectFileToNotExist(settingsPath);
     });
   });
 

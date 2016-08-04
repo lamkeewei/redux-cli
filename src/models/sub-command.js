@@ -4,8 +4,13 @@ import UI from './ui';
 class SubCommand {
   constructor(options = {}) {
     this.rawOptions = options;
-    this.settings = options.settings || new ProjectSettings();
     this.ui = options.ui || new UI();
+    try {
+      this.settings = options.settings || new ProjectSettings();
+    } catch(err) {
+      this.ui.writeError('.reduxrc is invalid.');
+      process.exit(1);
+    }
 
     this.environment = {
       ui: this.ui,

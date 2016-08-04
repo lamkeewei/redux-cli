@@ -22,10 +22,16 @@ class Init extends SubCommand {
   run() {
     this.ui.write(this.cliLogo());
     prompt.get(initPrompt, (err, result) => {
-      this.ui.writeInfo('Saving your settings...');
-      this.settings.setAllSettings(result);
-      this.settings.save();
-      this.ui.writeCreate('.reduxrc with configuration saved in project root.');
+      if (err && err.message === 'canceled') {
+        this.ui.writeLine(''); // clear to a new line 
+        this.ui.writeError('Initialization aborted. .reduxrc removed.');
+        this.settings.remove();
+      } else {
+        this.ui.writeInfo('Saving your settings...');
+        this.settings.setAllSettings(result);
+        this.settings.save();
+        this.ui.writeCreate('.reduxrc with configuration saved in project root.');
+      }
     });
   }
 

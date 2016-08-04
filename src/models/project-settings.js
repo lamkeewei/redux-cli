@@ -1,5 +1,5 @@
 import path from 'path';
-import { copySync } from 'fs-extra';
+import { copySync, removeSync } from 'fs-extra';
 import jf from 'jsonfile';
 import { pwd } from 'shelljs';
 
@@ -60,7 +60,11 @@ export default class ProjectSettings {
     this.settings = json;
   }
 
+  remove() {
+    removeSync(this.settingsPath());
+  }
+
   save() {
-    jf.writeFileSync(this.settingsPath(), this.settings);
+    jf.writeFileSync(this.settingsPath(), this.settings, { spaces: 2 });
   }
 }
